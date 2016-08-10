@@ -1,7 +1,7 @@
 <article class="user">
   <%= content_tag(
     :span,
-    avatar(user, 64, "grey small #{'admin' if user.admin?}"),
+    avatar(user, 64, "grey small #{'admin' if user.admin?} #{'site-admin' if site_admin?(user)}"),
     :class => 'status avatar'
   ) %>
   <div class="data">

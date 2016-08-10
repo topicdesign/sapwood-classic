@@ -20,9 +20,12 @@ module UsersHelper
   end
 
   def all_site_users
-    @all_site_users ||= (
-      current_site.users + User.admins
-    ).flatten.sort_by(&:last_name).unshift(current_user).uniq
+    @all_site_users ||= begin
+      (
+        current_site.users.includes(:site_users) +
+        User.admins.includes(:site_users)
+      ).flatten.sort_by(&:last_name).unshift(current_user).uniq
+    end
   end
 
   def is_current_user?

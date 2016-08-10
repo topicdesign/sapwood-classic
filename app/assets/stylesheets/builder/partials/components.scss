@@ -59,7 +59,7 @@ p.subtitle {
     width: 32px;
     height: 32px;
   }
-  &.admin {
+  &.admin, &.site-admin {
     position: relative;
     &:after {
       display: inline-block;
@@ -78,6 +78,9 @@ p.subtitle {
       background: $color-warning;
       border-radius: 100%;
     }
+  }
+  &.site-admin:after {
+    background: $color-primary;
   }
   img {
     width: 100%;
