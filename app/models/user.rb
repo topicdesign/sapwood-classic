@@ -32,6 +32,8 @@ class User < ActiveRecord::Base
 
   serialize :settings
 
+  attr_accessor :site_admin
+
   # ------------------------------------------ Associations
 
   has_many :site_users

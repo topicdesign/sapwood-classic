@@ -33,7 +33,7 @@ class Builder::SitesController < BuilderController
   end
 
   def edit
-    unless current_user.admin?
+    unless has_admin_access?
       redirect_to(builder_site_path(current_site))
     end
   end
@@ -124,7 +124,7 @@ class Builder::SitesController < BuilderController
   private
 
     def verify_admin
-      not_found unless current_user.admin?
+      not_found unless has_admin_access?
     end
 
     def create_params

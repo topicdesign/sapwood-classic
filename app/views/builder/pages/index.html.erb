@@ -12,7 +12,7 @@
   <% elsif site_root_pages.size > 0 %>
     <%= render :partial => 'filters', :locals => { :pages => @pages } %>
     <%= missing_content("No pages match your criteria.") %>
-  <% elsif site_templates.size == 0 && current_user.admin? %>
+  <% elsif site_templates.size == 0 && has_admin_access? %>
     <%= missing_content("You need to create a template before you can create a
     page.") %>
   <% else %>

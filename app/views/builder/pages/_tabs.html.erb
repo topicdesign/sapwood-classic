@@ -42,7 +42,7 @@
         builder_site_page_move_path(current_site, current_page),
         :class => "move #{action_name == 'move' ? 'active' : nil}"
       )
-    ) if current_user.admin? %>
+    ) if has_admin_access? %>
     <%= content_tag(
       :li,
       link_to(
