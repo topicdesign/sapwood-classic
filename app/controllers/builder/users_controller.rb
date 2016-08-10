@@ -15,14 +15,17 @@ class Builder::UsersController < BuilderController
   end
 
   def new
+    @site_user = SiteUser.find_by(:user => @user, :site => current_site)
   end
 
   def create
     @user = User.find_by_email(params[:user][:email])
     @user = User.create!(create_params) if @user.nil?
     if @user.save
-      @site_user = SiteUser.create!(:user => @user,
-        :site => current_site)
+      site_users = SiteUser.where(:user => @user, :site => current_site)
+      site_users.destroy_all if site_users.size > 1
+      @site_user = SiteUser.find_or_initialize_by(:user => @user, :site => current_site)
+      @site_user.site_admin = params[:user][:site_admin]
       if @site_user.save
         redirect_to(builder_route([@user], :index),
           :notice => t('notices.created', :item => "User"))
@@ -32,6 +35,10 @@ class Builder::UsersController < BuilderController
     else
       render 'new'
     end
+  end
+
+  def edit
+    @site_user = SiteUser.find_by(:user => @user, :site => current_site)
   end
 
   def update
@@ -44,6 +51,13 @@ class Builder::UsersController < BuilderController
       if @user == current_user && p[:password].present?
         sign_in(@user, :bypass => true)
       end
+      unless @user.admin?
+        site_users = SiteUser.where(:user => @user, :site => current_site)
+        site_users.destroy_all if site_users.size > 1
+        @site_user = SiteUser.find_or_initialize_by(:user => @user, :site => current_site)
+        @site_user.site_admin = params[:user][:site_admin]
+        @site_user.save!
+      end
       redirect_to(
         builder_route([@user], :index),
         :notice => t('notices.updated', :item => "User")
@@ -51,9 +65,6 @@ class Builder::UsersController < BuilderController
     else
       render 'edit'
     end
-  end
-
-  def edit
   end
 
   def destroy
