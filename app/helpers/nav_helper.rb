@@ -13,11 +13,10 @@ module NavHelper
   end
 
   def builder_site_nav
-    content_tag(:ul, :class => current_user.admin? ? 'admin' : nil) do
+    content_tag(:ul, :class => "#{'admin' if has_admin_access?}") do
       items = ''
       builder_site_nav_config.each do |item, attrs|
-        unless attrs.admin.present? && attrs.admin.to_bool == true &&
-          current_user.site_user?
+        if attrs.admin.blank? || (attrs.admin.to_bool == false) || has_admin_access?
           path = send(attrs.path, current_site)
           items += content_tag(
             :li,

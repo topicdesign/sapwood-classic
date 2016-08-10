@@ -14,7 +14,7 @@ module UsersHelper
   end
 
   def site_admin?(user = current_user)
-    su = user.site_users.select { |u| u.site_id = current_site.id }.first
+    su = user.site_users.find_by(:site => current_site)
     return su.site_admin? unless su.nil?
     false
   end
@@ -32,12 +32,23 @@ module UsersHelper
     @user == current_user
   end
 
+  def current_site_user
+    @current_site_user ||= begin
+      current_user.site_users.find_by(:site => current_site,
+                                      :user => current_user)
+    end
+  end
+
   def quick_user_status(user)
     if user.admin?
       link_to('', '#', :class => 'disabled admin')
     else
       link_to('', '#', :class => 'disabled user')
     end
+  end
+
+  def has_admin_access?(user = current_user, site = current_site)
+     current_user.admin? || current_site_user.site_admin?
   end
 
   def user_status_filters

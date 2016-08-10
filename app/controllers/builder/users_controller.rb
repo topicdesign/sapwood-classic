@@ -12,6 +12,10 @@ class Builder::UsersController < BuilderController
         builder_site_users_path(current_site, :user_status => 'all')
       )
     end
+
+    if has_admin_access? && !current_user.admin?
+      @users.reject!(&:admin?)
+    end
   end
 
   def new
@@ -80,9 +84,10 @@ class Builder::UsersController < BuilderController
       if action_name == 'new'
         @user = User.new(params[:user] ? create_params : nil)
       else
-        @user = User.find_by_id(params[:id])
-        unless @user.admin?
-          @user = current_site.users.find_by_id(params[:id])
+        if current_user.admin?
+          @user = User.find_by_id(params[:id])
+        else
+          @user = current_site.users.where(:admin => false).find_by_id(params[:id])
         end
       end
       not_found if @user.nil?

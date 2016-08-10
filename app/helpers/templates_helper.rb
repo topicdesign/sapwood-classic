@@ -109,7 +109,7 @@ module TemplatesHelper
   def current_template_actions
     s = current_site
     t = current_template
-    [
+    actions = [
       {
         :title => "#{current_template_pages.size} Pages",
         :path => builder_route([t, current_template_pages], :index),
@@ -125,13 +125,16 @@ module TemplatesHelper
         :title => 'Edit Template',
         :path => edit_builder_site_template_path(s, t),
         :class => 'edit'
-      },
-      {
-        :title => 'Developer Help',
-        :path => builder_route([t], :show),
-        :class => 'help'
       }
     ]
+
+    actions << {
+      :title => 'Developer Help',
+      :path => builder_route([t], :show),
+      :class => 'help'
+    } if current_user.admin?
+
+    actions
   end
 
   def quick_template_status(template)

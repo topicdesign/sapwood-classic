@@ -19,8 +19,7 @@
         <%= f.input :admin, :label => "Super Admin" %>
         <%= f.input :site_admin, :as => :boolean,
                     :input_html => { :checked => @site_user ? @site_user.site_admin? : false } %>
-        <%= em_p("This grants this user access to every site within this
-        application.") %>
+        <%= em_p("A super admin has access to all functions within every site. A site admin has access to most functions within the sites on which they are admins.") %>
       </div>
     </section>
   <% end %>

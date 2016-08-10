@@ -20,7 +20,7 @@
         'Edit',
         builder_route([menu], :edit),
         :class => 'edit'
-      ) if current_user.admin? %>
+      ) if has_admin_access? %>
     </div>
     <div class="bottom">
       <%= link_to(
@@ -29,7 +29,7 @@
         :method => :delete,
         :class => 'delete',
         :data => { :confirm => 'Are you sure?' }
-      ) if current_user.admin? %>
+      ) if has_admin_access? %>
     </div>
   </div>
 </article>

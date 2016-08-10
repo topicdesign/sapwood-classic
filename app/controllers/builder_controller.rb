@@ -46,7 +46,7 @@ class BuilderController < ActionController::Base
     end
 
     def verify_admin
-      not_found unless current_user.admin?
+      not_found unless has_admin_access?
     end
 
 end

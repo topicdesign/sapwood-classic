@@ -50,7 +50,7 @@
         :method => :delete,
         :class => 'delete',
         :data => { :confirm => 'Are you sure?' }
-      ) if current_user.admin? %>
+      ) if has_admin_access? %>
     </div>
   </div>
 </article>
