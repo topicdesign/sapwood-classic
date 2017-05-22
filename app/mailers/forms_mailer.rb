@@ -19,8 +19,10 @@ class FormsMailer < ActionMailer::Base
   def response_message(to, form, submission)
     @form = form
     @submission = submission
+    @site = @form.site
     mail(
       :to => to,
+      :from => "noreply@#{@site.url.strip}",
       :subject => form.email_subject
     )
   end
